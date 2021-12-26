@@ -2,6 +2,7 @@ package com.example.runwith.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -26,6 +27,10 @@ import retrofit2.Retrofit;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private final String SHARE_NAME = "userData";
+
     private EditText etId;
     private EditText etPw;
     private Button btnLogin;
@@ -36,6 +41,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         setLayout();
+
+        sharedPreferences = getSharedPreferences(SHARE_NAME, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        if(check())
+            toNextPage();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +61,27 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    public boolean check() {
+        String id = sharedPreferences.getString("id", null);
+        String pw = sharedPreferences.getString("pw", null);
+        if(id==null || pw == null)
+            return false;
+
+        return true;
+    }
+
+    public void save(String id, String pw) {
+        editor.putString("id", id);
+        editor.putString("pw", pw);
+        editor.apply();
+    }
+
+    public void toNextPage() {
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+
     public void loginStart(String id, String pw) {
         Retrofit retrofit = RetrofitClient.getClient();
         UserApi userApi = retrofit.create(UserApi.class);
@@ -58,8 +90,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse loginResponse = response.body();
                 if(loginResponse.getResultCode() == 200) {
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
+                    save(id, pw);
+                    toNextPage();
                 }
             }
 
@@ -69,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 
     //화면의 객체 연결
     private void setLayout() {
