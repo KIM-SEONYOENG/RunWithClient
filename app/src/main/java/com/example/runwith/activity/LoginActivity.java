@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.runwith.R;
 import com.example.runwith.domain.LoginResponse;
+import com.example.runwith.domain.User;
 import com.example.runwith.retrofit.RetrofitClient;
 import com.example.runwith.retrofit.UserApi;
 
@@ -27,10 +28,6 @@ import retrofit2.Retrofit;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private final String SHARE_NAME = "userData";
-
     private EditText etId;
     private EditText etPw;
     private Button btnLogin;
@@ -41,9 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         setLayout();
-
-        sharedPreferences = getSharedPreferences(SHARE_NAME, MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        User.init(getApplicationContext());
 
         if(check())
             toNextPage();
@@ -62,18 +57,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean check() {
-        String id = sharedPreferences.getString("id", null);
-        String pw = sharedPreferences.getString("pw", null);
-        if(id==null || pw == null)
+        if(User.read("id", null) == null)
             return false;
-
         return true;
-    }
-
-    public void save(String id, String pw) {
-        editor.putString("id", id);
-        editor.putString("pw", pw);
-        editor.apply();
     }
 
     public void toNextPage() {
@@ -90,7 +76,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse loginResponse = response.body();
                 if(loginResponse.getResultCode() == 200) {
-                    save(id, pw);
+                    User.write("id", id);
+                    User.write("pw", pw);
                     toNextPage();
                 }
             }
