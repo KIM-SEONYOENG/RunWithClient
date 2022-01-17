@@ -56,8 +56,11 @@ public class HomeActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-        Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
-        startService(fcm);
+
+        /*Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
+        startService(fcm);*/
+
+
     }
 
 

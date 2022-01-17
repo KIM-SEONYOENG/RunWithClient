@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -27,5 +28,6 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
         //ID랑 token을 같이 서버에 보냄
+        Log.d("runwith","My token is " + s);
     }
 }
