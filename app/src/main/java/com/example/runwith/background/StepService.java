@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -20,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.runwith.R;
 import com.example.runwith.activity.HomeActivity;
+import com.example.runwith.domain.StepCount;
 
 public class StepService extends Service implements SensorEventListener {
     private MyBinder mMyBinder = new MyBinder();
@@ -32,8 +32,7 @@ public class StepService extends Service implements SensorEventListener {
     SensorManager sensorManager;
     Sensor stepDetectorSensor;
 
-
-    private int count;
+    StepCount step = StepCount.getInstance();
     private StepCallback callback;
 
     @Nullable
@@ -71,7 +70,7 @@ public class StepService extends Service implements SensorEventListener {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), "channel")
                     .setSmallIcon(R.drawable.ic_launcher_background)
                     .setContentTitle("runWith")
-                    .setContentText(String.valueOf(count))
+                    .setContentText(String.valueOf(step.getCount()))
                     .setContentIntent(pendingIntent)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
@@ -102,9 +101,7 @@ public class StepService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.values[0] == 1.0f) {
-            count += event.values[0];
-            if (callback != null)
-                callback.onStepCallback(count);
+            step.plusCount();
         }
      }
 
