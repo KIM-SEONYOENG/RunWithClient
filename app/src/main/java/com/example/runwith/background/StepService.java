@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -30,6 +31,7 @@ public class StepService extends Service implements SensorEventListener {
 
     SensorManager sensorManager;
     Sensor stepDetectorSensor;
+
 
     private int count;
     private StepCallback callback;
