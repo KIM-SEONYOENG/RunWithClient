@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.runwith.FCM.MyFirebaseMessagingService;
 import com.example.runwith.R;
 import com.example.runwith.background.StepCallback;
 import com.example.runwith.background.StepService;
@@ -55,6 +56,8 @@ public class HomeActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+        Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
+        startService(fcm);
     }
 
 
