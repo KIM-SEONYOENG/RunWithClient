@@ -26,28 +26,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         //수신한 메시지를 처리
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-        NotificationCompat.Builder builder = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-                notificationManager.createNotificationChannel(channel);
-            }
-            builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
-        }else {
-            builder = new NotificationCompat.Builder(getApplicationContext());
-        }
-
-        String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
-
-        builder.setContentTitle(title)
-                .setContentText(body)
-                .setSmallIcon(R.drawable.ic_launcher_background);
-
-        Notification notification = builder.build();
-        notificationManager.notify(1, notification);
 
     }
 }
