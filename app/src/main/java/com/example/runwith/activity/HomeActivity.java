@@ -1,47 +1,52 @@
 package com.example.runwith.activity;
 
 import android.Manifest;
-import android.content.Context;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.runwith.R;
+import com.example.runwith.background.StepCallback;
+import com.example.runwith.background.StepService;
 
-public class HomeActivity extends AppCompatActivity implements SensorEventListener{
-    SensorManager sensorManager;
-    Sensor stepCountSensor;
+public class HomeActivity extends AppCompatActivity{
+    private final String TAG = "Home";
+
+    public static HomeActivity homeActivity;
+
+    private StepService stepService;
+    boolean isService = false;
+    private Intent intent;
 
     TextView tvStep;
     Button btnFriend;
-
-    int currentSteps = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        homeActivity = this;
+
         checkPermission();
         setLayout();
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        stepCountSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
-        if(stepCountSensor == null) {
-            Toast.makeText(HomeActivity.this, "No Sensor!", Toast.LENGTH_SHORT).show();
-        }
+        Intent serviceIntent = new Intent(HomeActivity.this, StepService.class);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForegroundService(serviceIntent);
+        else
+            startService(serviceIntent);
 
         btnFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,14 +55,6 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
                 startActivity(intent);
             }
         });
-    }
-
-    //센서 설정
-    public void onStart() {
-        super.onStart();
-        if (stepCountSensor != null) {
-            sensorManager.registerListener((SensorEventListener) HomeActivity.this, stepCountSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
 
 
@@ -74,19 +71,33 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    //센서 변경 감지
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            if(event.values[0] == 1.0f) {
-                currentSteps = 0;
-                tvStep.setText(String.valueOf(currentSteps));
-            }
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "바인딩");
+            StepService.MyBinder myBinder = (StepService.MyBinder) service;
+            stepService = myBinder.getService();
+            stepService.setCallback(stepCallback);
+            isService = true;
         }
-    }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isService = false;
+        }
+    };
 
-    }
+
+    private StepCallback stepCallback = new StepCallback() {
+        @Override
+        public void onStepCallback(int step) {
+            tvStep.setText(String.valueOf(step));
+        }
+
+        @Override
+        public void onUnbindService() {
+            isService = false;
+            Log.d(TAG, "바인드 해제");
+        }
+    };
 }

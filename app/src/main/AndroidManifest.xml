@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <uses-feature android:name="android.hardware.sensor.stepdetector" />
 
     <application
@@ -16,6 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RunWith">
+
+        <service android:name=".background.StepService" />
 
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.FriendActivity" />
