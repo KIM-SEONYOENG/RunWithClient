@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.runwith.R;
-import com.example.runwith.service.StepCallback;
-import com.example.runwith.service.StepService;
+import com.example.runwith.background.StepCallback;
+import com.example.runwith.background.StepService;
 
 public class HomeActivity extends AppCompatActivity{
     private final String TAG = "Home";

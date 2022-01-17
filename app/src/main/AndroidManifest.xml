@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RunWith">
 
-        <service android:name=".service.StepService" />
+        <service android:name=".background.StepService" />
 
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.FriendActivity" />
