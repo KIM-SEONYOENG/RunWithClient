@@ -89,10 +89,6 @@ public class HomeActivity extends AppCompatActivity{
 
 
     private StepCallback stepCallback = new StepCallback() {
-        @Override
-        public void onStepCallback(int step) {
-            tvStep.setText(String.valueOf(step));
-        }
 
         @Override
         public void onUnbindService() {
