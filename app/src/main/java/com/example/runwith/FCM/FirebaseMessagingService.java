@@ -12,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
     //클라우드 서버에 등록되었을때 호출, 파라미터로 전달된 token이 앱을 구분하기 위한 고유한 키가 됨
     @Override
