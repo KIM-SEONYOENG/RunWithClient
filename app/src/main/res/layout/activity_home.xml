@@ -31,5 +31,5 @@
         android:id="@+id/btnMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="메세지" />
 </LinearLayout>
