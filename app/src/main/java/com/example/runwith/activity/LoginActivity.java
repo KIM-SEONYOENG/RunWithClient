@@ -2,6 +2,12 @@ package com.example.runwith.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -55,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
                 startActivity(intent);
+                Log.d("hhhhhhhhhhhhhhhhh", "111111111");
             }
         });
 
@@ -91,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.d("error msg", t.getMessage());
+                Log.d(TAG, t.getMessage());
                 Log.d(TAG, "통신 실패!");
             }
         });

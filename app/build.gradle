@@ -39,7 +39,7 @@ dependencies {
 
     //view 관련
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-
+    
     //retrofit 관련
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'

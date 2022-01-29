@@ -71,6 +71,7 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<UserEntity>> call, Response<List<UserEntity>> response) {
                 friendCandidate = response.body();
+
                 if(friendCandidate.size()==0)
                     Toast.makeText(FriendActivity.this, "해당하는 아이디가 없습니다.", Toast.LENGTH_SHORT).show();
                 List<String> idList = new ArrayList<>();
