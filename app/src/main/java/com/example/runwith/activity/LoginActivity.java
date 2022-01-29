@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 String pw = etPw.getText().toString();
 
                 loginStart(id, pw);
+                Log.d("hhhhhhhhhhhhhhhhh", "111111111");
             }
         });
 
@@ -83,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
                 Log.d(TAG, "통신 실패!");
             }
         });

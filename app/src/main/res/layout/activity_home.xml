@@ -20,4 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:text="친구 찾기" />
+
+    <Button
+        android:id="@+id/btnMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 </LinearLayout>

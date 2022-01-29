@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity{
 
     TextView tvStep;
     Button btnFriend;
+    Button btnMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,12 @@ public class HomeActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+        btnMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         /*Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
         startService(fcm);*/
@@ -68,6 +75,7 @@ public class HomeActivity extends AppCompatActivity{
     public void setLayout() {
         tvStep = (TextView) findViewById(R.id.tvStep);
         btnFriend = (Button) findViewById(R.id.btnFriend);
+        btnMessage = (Button) findViewById(R.id.btnMessage);
     }
 
     //권한 확인
