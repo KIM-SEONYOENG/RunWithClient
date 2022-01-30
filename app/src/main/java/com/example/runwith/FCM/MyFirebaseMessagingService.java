@@ -11,22 +11,26 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+
 import com.example.runwith.R;
 import com.example.runwith.activity.HomeActivity;
 import com.example.runwith.domain.TokenResponse;
 import com.example.runwith.domain.User;
-import com.example.runwith.domain.UserToken;
+import com.example.runwith.domain.TokenEntity;
+import com.example.runwith.retrofit.RetrofitClient;
 import com.example.runwith.retrofit.TokenApi;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MyFirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+    Retrofit retrofit;
+    TokenApi tokenApi;
+
 
     public MyFirebaseMessagingService() {
         super();
@@ -98,14 +102,29 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
+
+        retrofit = RetrofitClient.getClient();
+        tokenApi = retrofit.create(TokenApi.class);
+
         //ID랑 token을 같이 서버에 보냄
         Log.d("runwith","My token is " + s);
         Log.d("runwithhhh","My token is " + s);
         //token 서버로 전송
         String token = FirebaseMessaging.getInstance().getToken().getResult();
         String id = User.read("id", "");
-        UserToken userToken = new UserToken(id, token);
-        TokenApi.sendToken(userToken).enqueue();
+        TokenEntity userToken = new TokenEntity(id, token);
+
+        tokenApi.sendToken(userToken).enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                //통신이 성공했을 때 후처리
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                //통신이 실패했을 때 후처리
+            }
+        });
 
     }
 }
