@@ -20,6 +20,19 @@ import com.example.runwith.FCM.MyFirebaseMessagingService;
 import com.example.runwith.R;
 import com.example.runwith.background.StepCallback;
 import com.example.runwith.background.StepService;
+import com.example.runwith.domain.MessageEntity;
+import com.example.runwith.domain.MessageResponse;
+import com.example.runwith.domain.TokenResponse;
+import com.example.runwith.domain.User;
+import com.example.runwith.domain.UserEntity;
+import com.example.runwith.retrofit.MessageApi;
+import com.example.runwith.retrofit.RetrofitClient;
+import com.example.runwith.retrofit.UserApi;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class HomeActivity extends AppCompatActivity{
     private final String TAG = "Home";
@@ -34,6 +47,8 @@ public class HomeActivity extends AppCompatActivity{
     Button btnFriend;
     Button btnRecord;
     Button btnMessage;
+    Retrofit retrofit;
+    MessageApi messageApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +59,9 @@ public class HomeActivity extends AppCompatActivity{
 
         checkPermission();
         setLayout();
+
+        retrofit = RetrofitClient.getClient();
+        messageApi = retrofit.create(MessageApi.class);
 
         Intent serviceIntent = new Intent(HomeActivity.this, StepService.class);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -70,13 +88,32 @@ public class HomeActivity extends AppCompatActivity{
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String id = User.read("id", "");
+                startSendMessage(new MessageEntity(id, "오늘 미션 성공 실화냐? 대박이다"));
             }
         });
 
         /*Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
         startService(fcm);*/
     }
+    private void startSendMessage(MessageEntity msg) {
+        messageApi.sendMessage(msg).enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+                MessageResponse result = response.body();
+                Log.d("메세지 전송 통신 성공", result.getMessage());
+                if (result.getResultCode() == 200) {
+                    Log.d("resultCode:200", "성고오오오옹");
+                }
+            }
 
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
+                Log.e("메세지 전송 통신 실패", t.getMessage());
+                t.printStackTrace();
+            }
+        });
+    }
 
     //레이아웃 세팅
     public void setLayout() {
