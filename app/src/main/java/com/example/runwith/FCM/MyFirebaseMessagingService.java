@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -118,11 +119,16 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 //통신이 성공했을 때 후처리
+                Log.d("토큰 전송 성공", response.body().getMessage());
+                if (response.body().getResultCode() == 200) {
+                    Log.d("받은 코드 200, 성공!!!!", "서어어엉공");
+                }
             }
 
             @Override
             public void onFailure(Call<TokenResponse> call, Throwable t) {
                 //통신이 실패했을 때 후처리
+                Log.e("토큰 전송 에러", t.getMessage());
             }
         });
 
