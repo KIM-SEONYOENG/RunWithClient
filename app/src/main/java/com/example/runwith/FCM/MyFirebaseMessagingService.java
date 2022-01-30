@@ -14,9 +14,17 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.example.runwith.R;
 import com.example.runwith.activity.HomeActivity;
+import com.example.runwith.domain.TokenResponse;
+import com.example.runwith.domain.User;
+import com.example.runwith.domain.UserToken;
+import com.example.runwith.retrofit.TokenApi;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyFirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -95,5 +103,9 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
         Log.d("runwithhhh","My token is " + s);
         //token 서버로 전송
         String token = FirebaseMessaging.getInstance().getToken().getResult();
+        String id = User.read("id", "");
+        UserToken userToken = new UserToken(id, token);
+        TokenApi.sendToken(userToken).enqueue();
+
     }
 }
