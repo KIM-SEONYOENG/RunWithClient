@@ -1,5 +1,7 @@
 package com.example.runwith.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etId;
     private EditText etPw;
     private Button btnLogin;
+    private Button btnJoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,14 @@ public class LoginActivity extends AppCompatActivity {
                 String pw = etPw.getText().toString();
 
                 loginStart(id, pw);
+            }
+        });
+
+        btnJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+                startActivity(intent);
                 Log.d("hhhhhhhhhhhhhhhhh", "111111111");
             }
         });
@@ -80,10 +91,13 @@ public class LoginActivity extends AppCompatActivity {
                     User.write("pw", pw);
                     toNextPage();
                 }
+                else if(loginResponse.getResultCode()>=300)
+                    Toast.makeText(LoginActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.d("error msg", t.getMessage());
                 Log.d(TAG, t.getMessage());
                 Log.d(TAG, "통신 실패!");
             }
@@ -95,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         etId = (EditText) findViewById(R.id.etId);
         etPw = (EditText) findViewById(R.id.etPw);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnJoin = (Button) findViewById(R.id.btnJoin);
     }
 
 }

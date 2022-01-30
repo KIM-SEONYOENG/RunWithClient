@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity{
 
     TextView tvStep;
     Button btnFriend;
+    Button btnRecord;
     Button btnMessage;
 
     @Override
@@ -57,17 +58,23 @@ public class HomeActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+
+        btnRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, RecordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
             }
         });
 
         /*Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
         startService(fcm);*/
-
-
     }
 
 
@@ -75,6 +82,7 @@ public class HomeActivity extends AppCompatActivity{
     public void setLayout() {
         tvStep = (TextView) findViewById(R.id.tvStep);
         btnFriend = (Button) findViewById(R.id.btnFriend);
+        btnRecord = (Button) findViewById(R.id.btnRecord);
         btnMessage = (Button) findViewById(R.id.btnMessage);
     }
 

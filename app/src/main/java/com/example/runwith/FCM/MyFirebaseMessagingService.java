@@ -12,7 +12,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.example.runwith.R;
 import com.example.runwith.activity.HomeActivity;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -92,9 +91,9 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
         //ID랑 token을 같이 서버에 보냄
+        Log.d("runwith","My token is " + s);
         Log.d("runwithhhh","My token is " + s);
         //token 서버로 전송
         String token = FirebaseMessaging.getInstance().getToken().getResult();
-
     }
 }
