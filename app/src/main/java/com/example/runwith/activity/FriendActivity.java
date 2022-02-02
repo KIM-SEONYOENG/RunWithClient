@@ -13,8 +13,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.runwith.R;
+import com.example.runwith.domain.TeamEntity;
+import com.example.runwith.domain.TeamResponse;
+import com.example.runwith.domain.User;
 import com.example.runwith.domain.UserEntity;
 import com.example.runwith.retrofit.RetrofitClient;
+import com.example.runwith.retrofit.TeamApi;
 import com.example.runwith.retrofit.UserApi;
 
 import java.util.ArrayList;
@@ -34,6 +38,7 @@ public class FriendActivity extends AppCompatActivity {
 
     Retrofit retrofit;
     UserApi userApi;
+    TeamApi teamApi;
 
     List<UserEntity> friendCandidate;
 
@@ -46,6 +51,7 @@ public class FriendActivity extends AppCompatActivity {
 
         retrofit  = RetrofitClient.getClient();
         userApi = retrofit.create(UserApi.class);
+        teamApi = retrofit.create(TeamApi.class);
 
         btnFindFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +68,22 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(FriendActivity.this, friendCandidate.get(position).getId(), Toast.LENGTH_SHORT).show();
+                String my_id = User.read("id", "");
+                teamApi.invite(new TeamEntity(my_id, friendCandidate.get(position).getId())).enqueue(new Callback<TeamResponse>() {
+                    @Override
+                    public void onResponse(Call<TeamResponse> call, Response<TeamResponse> response) {
+                        TeamResponse result = response.body();
+                        if (result.getResultCode() == 200)
+                            finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<TeamResponse> call, Throwable t) {
+                        Log.e("친구 초대 에러", t.getMessage());
+                    }
+                });
+
+
             }
         });
     }
