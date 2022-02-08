@@ -2,12 +2,6 @@ package com.example.runwith.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.runwith.R;
-import com.example.runwith.domain.LoginResponse;
+import com.example.runwith.domain.DataResponse;
 import com.example.runwith.domain.User;
 import com.example.runwith.retrofit.RetrofitClient;
 import com.example.runwith.retrofit.UserApi;
@@ -82,21 +76,21 @@ public class LoginActivity extends AppCompatActivity {
     public void loginStart(String id, String pw) {
         Retrofit retrofit = RetrofitClient.getClient();
         UserApi userApi = retrofit.create(UserApi.class);
-        userApi.login(id, pw).enqueue(new Callback<LoginResponse>() {
+        userApi.login(id, pw).enqueue(new Callback<DataResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                LoginResponse loginResponse = response.body();
-                if(loginResponse.getResultCode() == 200) {
+            public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
+                DataResponse dataResponse = response.body();
+                if(dataResponse.getResultCode() == 200) {
                     User.write("id", id);
                     User.write("pw", pw);
                     toNextPage();
                 }
-                else if(loginResponse.getResultCode()>=300)
-                    Toast.makeText(LoginActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                else if(dataResponse.getResultCode()>=300)
+                    Toast.makeText(LoginActivity.this, dataResponse.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<DataResponse> call, Throwable t) {
                 Log.d("error msg", t.getMessage());
                 Log.d(TAG, t.getMessage());
                 Log.d(TAG, "통신 실패!");

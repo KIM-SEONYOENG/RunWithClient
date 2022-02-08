@@ -16,9 +16,9 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface RecordApi {
-    @POST
-    Call postRecord(@Body RecordEntity newRecord);
-
     @GET("/record/showRecord")
     Call<List<RecordEntity>> showRecord(@Query("id") String id);
+
+    @GET("/record/findMemberRecord")
+    Call<RecordEntity> findMemberRecord(@Query("id") String id);
 }
