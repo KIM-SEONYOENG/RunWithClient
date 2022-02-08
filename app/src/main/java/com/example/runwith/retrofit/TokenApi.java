@@ -12,9 +12,9 @@ import retrofit2.http.POST;
 public interface TokenApi {
     //Call<응답클래스이름> 그냥 이름(@Body 보낼 클래스데이터 이름);
 
-    @POST("/message/addToken")
+    @POST("/token/addToken")
     Call<DataResponse> sendToken(@Body TokenEntity token);
 
-    @POST("/message/sendMessage")
+    @POST("/token/sendMessage")
     Call<DataResponse> sendMessage(@Body MessageEntity message);
 }
