@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.runwith.R;
-import com.example.runwith.domain.LoginResponse;
+import com.example.runwith.domain.DataResponse;
 import com.example.runwith.domain.UserEntity;
 import com.example.runwith.retrofit.RetrofitClient;
 import com.example.runwith.retrofit.UserApi;
@@ -56,10 +56,10 @@ public class JoinActivity extends AppCompatActivity {
                 userEntity.setPw(etPw.getText().toString());
                 Log.d(TAG, "id: " + userEntity.getId() + " pw: " + userEntity.getPw());
 
-                userApi.join(userEntity).enqueue(new Callback<LoginResponse>() {
+                userApi.join(userEntity).enqueue(new Callback<DataResponse>() {
                     @Override
-                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                        LoginResponse result = response.body();
+                    public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
+                        DataResponse result = response.body();
                         if(result!=null && result.getResultCode()==200) {
                             Toast.makeText(JoinActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -67,7 +67,7 @@ public class JoinActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    public void onFailure(Call<DataResponse> call, Throwable t) {
                         Log.d(TAG, "통신 에러!");
                     }
                 });

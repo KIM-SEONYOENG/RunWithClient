@@ -13,8 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.runwith.R;
+import com.example.runwith.domain.DataResponse;
 import com.example.runwith.domain.TeamEntity;
-import com.example.runwith.domain.TeamResponse;
 import com.example.runwith.domain.User;
 import com.example.runwith.domain.UserEntity;
 import com.example.runwith.retrofit.RetrofitClient;
@@ -69,21 +69,19 @@ public class FriendActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(FriendActivity.this, friendCandidate.get(position).getId(), Toast.LENGTH_SHORT).show();
                 String my_id = User.read("id", "");
-                teamApi.invite(new TeamEntity(my_id, friendCandidate.get(position).getId())).enqueue(new Callback<TeamResponse>() {
+                teamApi.invite(new TeamEntity(my_id, friendCandidate.get(position).getId())).enqueue(new Callback<DataResponse>() {
                     @Override
-                    public void onResponse(Call<TeamResponse> call, Response<TeamResponse> response) {
-                        TeamResponse result = response.body();
-                        if (result.getResultCode() == 200)
+                    public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
+                        DataResponse result = response.body();
+                        if(result.getResultCode() == 200)
                             finish();
                     }
 
                     @Override
-                    public void onFailure(Call<TeamResponse> call, Throwable t) {
-                        Log.e("친구 초대 에러", t.getMessage());
+                    public void onFailure(Call<DataResponse> call, Throwable t) {
+                        Log.d(TAG, "친구 추가 에러!");
                     }
                 });
-
-
             }
         });
     }

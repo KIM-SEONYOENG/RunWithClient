@@ -16,18 +16,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.runwith.FCM.MyFirebaseMessagingService;
 import com.example.runwith.R;
 import com.example.runwith.background.StepCallback;
 import com.example.runwith.background.StepService;
+import com.example.runwith.domain.DataResponse;
 import com.example.runwith.domain.MessageEntity;
-import com.example.runwith.domain.MessageResponse;
-import com.example.runwith.domain.TokenResponse;
 import com.example.runwith.domain.User;
-import com.example.runwith.domain.UserEntity;
-import com.example.runwith.retrofit.MessageApi;
 import com.example.runwith.retrofit.RetrofitClient;
-import com.example.runwith.retrofit.UserApi;
+import com.example.runwith.retrofit.TokenApi;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,8 +43,10 @@ public class HomeActivity extends AppCompatActivity{
     Button btnFriend;
     Button btnRecord;
     Button btnMessage;
+    Button btnMember;
+
     Retrofit retrofit;
-    MessageApi messageApi;
+    TokenApi tokenApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,7 @@ public class HomeActivity extends AppCompatActivity{
         setLayout();
 
         retrofit = RetrofitClient.getClient();
-        messageApi = retrofit.create(MessageApi.class);
+        tokenApi = retrofit.create(TokenApi.class);
 
         Intent serviceIntent = new Intent(HomeActivity.this, StepService.class);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -93,14 +91,23 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
 
+        btnMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, MemberActivity.class);
+                startActivity(intent);
+            }
+        });
         /*Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
         startService(fcm);*/
     }
+
+
     private void startSendMessage(MessageEntity msg) {
-        messageApi.sendMessage(msg).enqueue(new Callback<MessageResponse>() {
+        tokenApi.sendMessage(msg).enqueue(new Callback<DataResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                MessageResponse result = response.body();
+            public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
+                DataResponse result = response.body();
                 Log.d("메세지 전송 통신 성공", result.getMessage());
                 if (result.getResultCode() == 200) {
                     Log.d("resultCode:200", "성고오오오옹");
@@ -108,7 +115,7 @@ public class HomeActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            public void onFailure(Call<DataResponse> call, Throwable t) {
                 Log.e("메세지 전송 통신 실패", t.getMessage());
                 t.printStackTrace();
             }
@@ -121,6 +128,7 @@ public class HomeActivity extends AppCompatActivity{
         btnFriend = (Button) findViewById(R.id.btnFriend);
         btnRecord = (Button) findViewById(R.id.btnRecord);
         btnMessage = (Button) findViewById(R.id.btnMessage);
+        btnMember = (Button) findViewById(R.id.btnMember);
     }
 
     //권한 확인

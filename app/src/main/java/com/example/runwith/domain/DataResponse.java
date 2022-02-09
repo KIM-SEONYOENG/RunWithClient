@@ -1,6 +1,6 @@
 package com.example.runwith.domain;
 
-public class TeamResponse {
+public class DataResponse {
     private int resultCode;
     private String message;
 
