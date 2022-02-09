@@ -15,4 +15,7 @@ public interface TeamApi {
 
     @POST("/team/invite")
     Call<TeamResponse> invite(@Body TeamEntity team);
+
+    @POST("/team/accept")
+    Call<TeamResponse> accept(@Body TeamEntity team);
 }
