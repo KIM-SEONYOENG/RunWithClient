@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.runwith.FCM.MyFirebaseMessagingService;
 import com.example.runwith.R;
 import com.example.runwith.background.StepCallback;
 import com.example.runwith.background.StepService;
@@ -24,6 +26,7 @@ import com.example.runwith.domain.MessageEntity;
 import com.example.runwith.domain.User;
 import com.example.runwith.retrofit.RetrofitClient;
 import com.example.runwith.retrofit.TokenApi;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,39 +70,32 @@ public class HomeActivity extends AppCompatActivity{
         else
             startService(serviceIntent);
 
-        btnFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, FriendActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, RecordActivity.class);
-                startActivity(intent);
-            }
-        });
+        Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
+        startService(fcm);
+    }
 
-        btnMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnFriend:
+                intent = new Intent(HomeActivity.this, FriendActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.btnRecord:
+                intent = new Intent(HomeActivity.this, RecordActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.btnMessage:
                 String id = User.read("id", "");
                 startSendMessage(new MessageEntity(id, "오늘 미션 성공 실화냐? 대박이다"));
-            }
-        });
-
-        btnMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btnMember:
                 Intent intent = new Intent(HomeActivity.this, MemberActivity.class);
                 startActivity(intent);
-            }
-        });
-        /*Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
-        startService(fcm);*/
+
+        }
     }
 
 

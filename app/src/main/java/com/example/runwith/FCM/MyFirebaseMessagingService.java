@@ -21,6 +21,7 @@ import com.example.runwith.domain.TokenEntity;
 import com.example.runwith.retrofit.RetrofitClient;
 import com.example.runwith.retrofit.TokenApi;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import retrofit2.Call;
@@ -28,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MyFirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
     Retrofit retrofit;
     TokenApi tokenApi;
 
