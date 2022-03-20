@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runwith.R;
-import com.example.runwith.etc.RecordRecyclerAdapter;
+import com.example.runwith.adapter.RecordRecyclerAdapter;
 import com.example.runwith.domain.RecordEntity;
 import com.example.runwith.domain.User;
 import com.example.runwith.retrofit.RecordApi;

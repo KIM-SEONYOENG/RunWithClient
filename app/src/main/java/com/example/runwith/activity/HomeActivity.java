@@ -64,15 +64,22 @@ public class HomeActivity extends AppCompatActivity{
         retrofit = RetrofitClient.getClient();
         tokenApi = retrofit.create(TokenApi.class);
 
-        Intent serviceIntent = new Intent(HomeActivity.this, StepService.class);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            startForegroundService(serviceIntent);
-        else
-            startService(serviceIntent);
-
+        startService();
 
         Intent fcm = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
         startService(fcm);
+    }
+
+    public void startService() {
+        Intent fcmService = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
+//        Intent serviceIntent = new Intent(getApplicationContext(), StepService.class);
+//
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+//            startForegroundService(serviceIntent);
+//        else
+//            startService(serviceIntent);
+
+        startService(fcmService);
     }
 
     public void onClick(View view) {
