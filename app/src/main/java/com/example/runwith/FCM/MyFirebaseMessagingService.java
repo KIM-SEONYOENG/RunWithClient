@@ -113,26 +113,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("runwithhhh","My token is " + s);
         //token 서버로 전송
         String token = FirebaseMessaging.getInstance().getToken().getResult();
-        String id = User.read("id", "");
-        TokenEntity userToken = new TokenEntity(id, token);
 
-        tokenApi.sendToken(userToken).enqueue(new Callback<DataResponse>() {
-            @Override
-            public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
-                //통신이 성공했을 때 후처리
-                Log.d("토큰 전송 성공", response.body().getMessage());
-                if (response.body().getResultCode() == 200) {
-                    Log.d("받은 코드 200, 성공!!!!", "서어어엉공");
-                } else if(response.body().getResultCode() == 400) {
-                    Log.d("받은 코드 400", "실패.....");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataResponse> call, Throwable t) {
-                    Log.e("토큰 전송 에러", t.getMessage());
-            }
-        });
 
     }
 }

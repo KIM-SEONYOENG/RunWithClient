@@ -14,7 +14,10 @@ import retrofit2.http.Query;
 //통신을 정의해주는 interface
 public interface UserApi {
     @GET("/user/login")
-    Call<DataResponse> login(@Query("id") String id, @Query("pw") String pw);
+    Call<DataResponse> login(@Query("id") String id, @Query("token") String token);
+
+    @GET("/user/idcheck")
+    Call<DataResponse> idcheck(@Query("id") String id);
 
     @GET("/user/searchUser")
     Call<List<UserEntity>> findUser(@Query("keyword") String keyword);

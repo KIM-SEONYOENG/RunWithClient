@@ -15,6 +15,7 @@ import com.example.runwith.domain.DataResponse;
 import com.example.runwith.domain.User;
 import com.example.runwith.retrofit.RetrofitClient;
 import com.example.runwith.retrofit.UserApi;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,20 +45,20 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //사용자가 입력한 id 와 pw 가져오기
                 String id = etId.getText().toString();
-                String pw = etPw.getText().toString();
+                //String pw = etPw.getText().toString();
 
-                loginStart(id, pw);
+                loginStart(id);
             }
         });
 
-        btnJoin.setOnClickListener(new View.OnClickListener() {
+        /*btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
                 startActivity(intent);
                 Log.d("hhhhhhhhhhhhhhhhh", "111111111");
             }
-        });
+        });*/
 
     }
 
@@ -73,16 +74,36 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void loginStart(String id, String pw) {
+    public void loginStart(String id) {
         Retrofit retrofit = RetrofitClient.getClient();
         UserApi userApi = retrofit.create(UserApi.class);
-        userApi.login(id, pw).enqueue(new Callback<DataResponse>() {
+        userApi.idcheck(id).enqueue(new Callback<DataResponse>() {
             @Override
             public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
                 DataResponse dataResponse = response.body();
                 if(dataResponse.getResultCode() == 200) {
                     User.write("id", id);
-                    User.write("pw", pw);
+                    String token = FirebaseMessaging.getInstance().getToken().getResult();
+                    userApi.login(id, token).enqueue(new Callback<DataResponse>() {
+                        @Override
+                        public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
+                            DataResponse dataResponse0 = response.body();
+                            if(dataResponse0.getResultCode() == 200) {
+                                User.write("id", id);
+                                //User.write("pw", pw);
+                                //toNextPage();
+                            }
+                            else if(dataResponse0.getResultCode()>=300)
+                                Toast.makeText(LoginActivity.this, dataResponse0.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<DataResponse> call, Throwable t) {
+                            Log.d("error msg", t.getMessage());
+                            Log.d(TAG, t.getMessage());
+                            Log.d(TAG, "통신 실패!");
+                        }
+                    });
                     toNextPage();
                 }
                 else if(dataResponse.getResultCode()>=300)
@@ -96,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "통신 실패!");
             }
         });
+
     }
 
     //화면의 객체 연결
@@ -103,7 +125,6 @@ public class LoginActivity extends AppCompatActivity {
         etId = (EditText) findViewById(R.id.etId);
         etPw = (EditText) findViewById(R.id.etPw);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnJoin = (Button) findViewById(R.id.btnJoin);
     }
 
 }
